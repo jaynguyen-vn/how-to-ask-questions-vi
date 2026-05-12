@@ -20,7 +20,7 @@ Bản này tôn trọng tinh thần và bản quyền của tác phẩm gốc �
 
 - Single HTML file, không build, mở trực tiếp trong trình duyệt.
 - Sidebar TOC sticky, highlight section đang đọc.
-- 11 section đầy đủ: từ "Trước khi hỏi" → "Cách trả lời câu hỏi".
+- 12 section đầy đủ: từ "AI giúp gì, khi nào hỏi người khác" → "Cách trả lời câu hỏi".
 - Ví dụ Bad/Good thực tế: React, Postgres…
 - Responsive: desktop, tablet, mobile.
 - Dark mode mặc định, phong cách hacker terminal.

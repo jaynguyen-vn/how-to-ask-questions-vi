@@ -295,6 +295,7 @@
     <ol>
       <li><a href="#disclaimer">Tuyên bố miễn trừ</a></li>
       <li><a href="#intro">Mở đầu</a></li>
+      <li><a href="#ai-context">AI giúp gì, khi nào hỏi người khác</a></li>
       <li><a href="#before-ask">Trước khi hỏi</a></li>
       <li><a href="#when-ask">Khi hỏi</a>
         <ul>
@@ -348,7 +349,7 @@
       <p style="margin:0;color:var(--fg-dim);">
         Bản viết lại tiếng Việt hiện đại của bài <em>“How To Ask Questions The Smart Way”</em>
         của Eric S. Raymond &amp; Rick Moen. Giữ nguyên tinh thần, cập nhật ví dụ
-        cho thời Discord/GitHub/Stack Overflow.
+        cho thời Discord/GitHub/Stack Overflow/LLM.
       </p>
       <div class="meta">
         Tác giả gốc: <span>Eric Steven Raymond</span> · <span>Rick Moen</span><br>
@@ -390,15 +391,33 @@
       </blockquote>
     </section>
 
+    <section id="ai-context">
+      <h2><span class="num">[02]</span> AI giúp gì, khi nào vẫn nên hỏi người khác</h2>
+      <p>Ở thời điểm hiện tại, dev mới có lợi thế rất lớn: bạn có thể hỏi ChatGPT, Claude, Cursor, Gemini... để tự debug, đọc lỗi, giải thích khái niệm, viết test nhỏ, hoặc tạo một checklist kiểm tra trước khi làm phiền người khác.</p>
+      <p>Nhưng AI không thay thế hoàn toàn cộng đồng hay người có kinh nghiệm. Sẽ có lúc bạn vẫn nên hỏi người khác, đặc biệt khi:</p>
+      <ul>
+        <li><strong>Bug quá nhiều ngữ cảnh.</strong> Lỗi phụ thuộc vào repo, dữ liệu, hạ tầng, lịch sử thay đổi, hoặc quyết định kỹ thuật nội bộ.</li>
+        <li><strong>Cần review hướng làm.</strong> Bạn không chỉ cần câu lệnh fix, mà cần biết cách tiếp cận có đúng, có maintainable, có ảnh hưởng lâu dài không.</li>
+        <li><strong>Đụng production.</strong> Khi có rủi ro mất dữ liệu, downtime, bảo mật, tiền bạc, hoặc ảnh hưởng người dùng thật, cần thêm mắt người kiểm tra.</li>
+        <li><strong>Framework/tool lạ hoặc edge case mới.</strong> AI có thể tự tin trả lời sai, nhất là với API mới, version mới, hoặc hành vi ít người gặp.</li>
+        <li><strong>Business logic riêng.</strong> Chỉ team hoặc cộng đồng dự án mới hiểu tại sao hệ thống được thiết kế như vậy.</li>
+        <li><strong>Cần góc nhìn thực tế.</strong> Có những câu trả lời đúng về mặt kỹ thuật nhưng không hợp với deadline, team size, vận hành, hoặc văn hóa dự án.</li>
+      </ul>
+      <div class="callout tip">
+        <span class="label">// tip</span>
+        Dùng AI như vòng debug đầu tiên. Khi hỏi người khác, hãy mang theo phần bạn đã hỏi AI, điều bạn đã kiểm chứng, và chỗ bạn vẫn còn nghi ngờ. Như vậy câu hỏi của bạn rõ hơn, và người trả lời đỡ phải bắt đầu từ số không.
+      </div>
+    </section>
+
     <section id="before-ask">
-      <h2><span class="num">[02]</span> Trước khi hỏi</h2>
+      <h2><span class="num">[03]</span> Trước khi hỏi</h2>
       <p>Trước khi bạn đặt một câu hỏi kỹ thuật trên Discord, Stack Overflow, GitHub Issues hay bất kỳ nơi nào, hãy lần lượt làm những việc sau:</p>
 
       <ol class="checklist">
         <li><strong>Đọc tài liệu / RTFM.</strong> Đọc <code>README</code>, <code>docs/</code>, FAQ, manual của tool.</li>
         <li><strong>Tìm trong archive.</strong> Tìm trong issue cũ (đóng &amp; mở), Stack Overflow, mailing list archive.</li>
         <li><strong>Google nó.</strong> Copy nguyên thông báo lỗi vào ô search. 80% trường hợp đã có người gặp.</li>
-        <li><strong>Hỏi AI / LLM trước.</strong> Hiện tại ChatGPT, Claude, Gemini… giải được khá nhiều bug phổ thông. Hỏi nó cho bạn dạng phỏng vấn 1-1, không tốn thời gian của người khác.</li>
+        <li><strong>Hỏi AI / LLM trước.</strong> Hiện tại ChatGPT, Claude, Cursor, Gemini... giải được khá nhiều bug phổ thông. Hỏi nó cho bạn dạng phỏng vấn 1-1, không tốn thời gian của người khác.</li>
         <li><strong>Tự thử nghiệm.</strong> Đọc code nguồn nếu có. In log. Tạo MRE (Minimal Reproducible Example).</li>
         <li><strong>Hỏi một người bạn thạo việc.</strong> Trước khi hỏi cả thế giới, hỏi một người cụ thể nếu có.</li>
       </ol>
@@ -412,7 +431,7 @@
     </section>
 
     <section id="when-ask">
-      <h2><span class="num">[03]</span> Khi hỏi</h2>
+      <h2><span class="num">[04]</span> Khi hỏi</h2>
 
       <h3 id="forum">Chọn forum cẩn thận</h3>
       <p>Đăng câu hỏi sai chỗ là cách nhanh nhất để không nhận được trả lời. Một số nguyên tắc:</p>
@@ -559,7 +578,7 @@ on Safari iOS</pre>
     </section>
 
     <section id="interpret">
-      <h2><span class="num">[04]</span> Cách đọc câu trả lời</h2>
+      <h2><span class="num">[05]</span> Cách đọc câu trả lời</h2>
 
       <h3 id="rtfm">RTFM và STFW — Khi bạn nhận được hai chữ này</h3>
       <p><strong>RTFM</strong> = “Read The F***ing Manual.” <strong>STFW</strong> = “Search The F***ing Web.” Nhận được hai cụm này nghĩa là người trả lời cho rằng:</p>
@@ -592,7 +611,7 @@ on Safari iOS</pre>
     </section>
 
     <section id="dont-ask">
-      <h2><span class="num">[05]</span> Những câu hỏi không nên hỏi</h2>
+      <h2><span class="num">[06]</span> Những câu hỏi không nên hỏi</h2>
       <p>Dưới đây là một số dạng câu hỏi kinh điển khiến hacker quay lưng — kèm <em>cái họ đang nghĩ</em> nhưng có thể không nói ra:</p>
 
       <div class="qa">
@@ -627,7 +646,7 @@ on Safari iOS</pre>
     </section>
 
     <section id="good-bad">
-      <h2><span class="num">[06]</span> Câu hỏi hay vs câu hỏi dở — ví dụ thực tế</h2>
+      <h2><span class="num">[07]</span> Câu hỏi hay vs câu hỏi dở — ví dụ thực tế</h2>
 
       <div class="compare">
         <div class="bad">
@@ -696,7 +715,7 @@ hơn cho query này không?</pre>
     </section>
 
     <section id="no-answer">
-      <h2><span class="num">[07]</span> Nếu không có ai trả lời</h2>
+      <h2><span class="num">[08]</span> Nếu không có ai trả lời</h2>
       <p>Đừng coi đó là chuyện cá nhân. Có nhiều lý do hợp lý:</p>
       <ul>
         <li>Câu hỏi của bạn quá đặc thù, không ai từng gặp.</li>
@@ -715,7 +734,7 @@ hơn cho query này không?</pre>
     </section>
 
     <section id="how-answer">
-      <h2><span class="num">[08]</span> Mặt còn lại: cách trả lời câu hỏi cho tử tế</h2>
+      <h2><span class="num">[09]</span> Mặt còn lại: cách trả lời câu hỏi cho tử tế</h2>
       <p>Nếu bạn là người trả lời, cộng đồng cũng cần bạn theo những nguyên tắc này:</p>
       <ul>
         <li><strong>Dịu dàng.</strong> Người hỏi đang căng thẳng. Khắc nghiệt với người mới = hỏng cả cộng đồng dài hạn.</li>
@@ -733,7 +752,7 @@ hơn cho query này không?</pre>
     </section>
 
     <section id="resources">
-      <h2><span class="num">[09]</span> Tài nguyên liên quan</h2>
+      <h2><span class="num">[10]</span> Tài nguyên liên quan</h2>
       <ul>
         <li><a href="http://www.catb.org/~esr/faqs/smart-questions.html" target="_blank" rel="noopener">Bài gốc — How To Ask Questions The Smart Way</a></li>
         <li><a href="http://www.catb.org/~esr/faqs/hacker-howto.html" target="_blank" rel="noopener">How To Become A Hacker — ESR</a></li>
@@ -746,7 +765,7 @@ hơn cho query này không?</pre>
     </section>
 
     <section id="thanks">
-      <h2><span class="num">[10]</span> Lời cảm ơn</h2>
+      <h2><span class="num">[11]</span> Lời cảm ơn</h2>
       <p>Bản gốc của Eric S. Raymond và Rick Moen đã định hình văn hóa hỏi-đáp kỹ thuật trong suốt 20+ năm. Bản tiếng Việt này được viết lại với mong muốn giúp lập trình viên nói tiếng Việt tham gia cộng đồng quốc tế một cách tự tin và được giúp đỡ.</p>
       <p>Nếu bài viết hữu ích, hãy chuyển nó cho người tiếp theo bạn thấy đang chuẩn bị đăng một câu hỏi mơ hồ trong một group lập trình.</p>
 
