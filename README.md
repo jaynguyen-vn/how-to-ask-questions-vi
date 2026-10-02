@@ -1,6 +1,6 @@
 # Cách Hỏi Để Người Khác Muốn Giúp
 
-> Bản viết lại tiếng Việt hiện đại của bài kinh điển  
+> Hướng dẫn tiếng Việt dựa trên bài kinh điển  
 > **["How To Ask Questions The Smart Way"](http://www.catb.org/~esr/faqs/smart-questions.html)**  
 > của Eric S. Raymond & Rick Moen.
 
@@ -12,7 +12,7 @@ Bài gốc của ESR đã định hình văn hóa hỏi-đáp kỹ thuật trong
 
 - Ví dụ trong bài gốc dùng Usenet, IRC — hiện đã hiếm dùng.
 - Văn phong gốc dày đặc, khó tiếp cận với người mới đọc tiếng Anh kỹ thuật.
-- Cần một bản tiếng Việt **viết lại** (không phải dịch máy) cho thời Discord/GitHub/Stack Overflow/LLM.
+- Cần một hướng dẫn tiếng Việt (không phải dịch máy) bàn lại các ý chính cho thời Discord/GitHub/Stack Overflow/LLM.
 
 Bản này tôn trọng tinh thần và bản quyền của tác phẩm gốc — không thay thế, chỉ làm cầu nối cho dev Việt.
 
@@ -20,10 +20,11 @@ Bản này tôn trọng tinh thần và bản quyền của tác phẩm gốc �
 
 - Single HTML file, không build, mở trực tiếp trong trình duyệt.
 - Sidebar TOC sticky, highlight section đang đọc.
-- 12 section đầy đủ: từ "AI giúp gì, khi nào hỏi người khác" → "Cách trả lời câu hỏi".
-- Ví dụ Bad/Good thực tế: React, Postgres…
-- Responsive: desktop, tablet, mobile.
-- Dark mode mặc định, phong cách hacker terminal.
+- 16 mục: tóm tắt 30 giây, trước khi hỏi, chọn nơi hỏi, viết câu hỏi, thái độ khi hỏi, đọc câu trả lời, đến cách trả lời câu hỏi cho người khác.
+- Ví dụ dở/tốt viết bằng tiếng Anh (React, Postgres…), đúng như thứ bạn sẽ đăng lên cộng đồng quốc tế.
+- Mẫu câu hỏi có nút copy.
+- Responsive: desktop, tablet, mobile (mục lục tự thu gọn trên mobile).
+- Dark mode mặc định, phong cách hacker terminal; thân bài dùng font Be Vietnam Pro cho dễ đọc.
 
 ## Sử dụng
 
@@ -51,14 +52,15 @@ python3 -m http.server 8000
 PR và issue luôn được hoan nghênh:
 
 - Sửa lỗi chính tả, ngữ pháp.
-- Đề xuất ví dụ Việt-hóa tốt hơn.
+- Đề xuất ví dụ thực tế tốt hơn.
 - Cải thiện UI/UX/accessibility.
 - Dịch sang ngôn ngữ khác (tách branch riêng).
 
 ## Bản quyền
 
-- **Bài gốc**: © Eric S. Raymond & Rick Moen — theo [copying policy](http://www.catb.org/~esr/) tại catb.org.
-- **Bản viết lại tiếng Việt**: phi lợi nhuận, miễn phí cho mọi mục đích phi thương mại.
+- **Bài gốc**: © Eric S. Raymond & Rick Moen — theo [copying policy](http://www.catb.org/~esr/copying.html) tại catb.org.
+- **Hướng dẫn tiếng Việt này**: phi lợi nhuận, miễn phí cho mọi mục đích phi thương mại. Đây là bài bình luận dựa trên bản gốc, không phải bản dịch hay phiên bản sửa đổi, đúng với hướng mà copying policy của ESR đề nghị.
+- **Mốc thời gian**: dựa trên bài gốc Revision 3.10 (21/05/2014). Viết lần đầu 12/05/2026, cập nhật 02/10/2026.
 
 ## Tài nguyên liên quan
 

@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Cách Hỏi Để Người Khác Muốn Giúp — Bản viết lại tiếng Việt (ESR / Rick Moen)</title>
-<meta name="description" content="Bản viết lại hiện đại bằng tiếng Việt của 'How To Ask Questions The Smart Way' của Eric S. Raymond & Rick Moen." />
+<title>Cách Hỏi Để Người Khác Muốn Giúp — Hướng dẫn tiếng Việt dựa trên bài của ESR / Rick Moen</title>
+<meta name="description" content="Hướng dẫn tiếng Việt dựa trên và bình luận về 'How To Ask Questions The Smart Way' của Eric S. Raymond & Rick Moen." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0b0f14;
     --bg-soft: #11161d;
     --bg-card: #0e141b;
     --fg: #c8d3df;
-    --fg-dim: #7c8a99;
-    --fg-mute: #4a5563;
+    --fg-dim: #8b98a7;
+    --fg-mute: #76838f;
     --accent: #5ef38c;
     --accent-2: #ffb86c;
     --accent-3: #7aa2ff;
@@ -24,11 +24,13 @@
     --line-2: #232d39;
     --selection: #265c34;
     --radius: 6px;
+    --sans: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     --mono: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   }
 
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
+  [id] { scroll-margin-top: 70px; }
   body {
     margin: 0;
     background:
@@ -36,12 +38,22 @@
       radial-gradient(900px 500px at 100% 10%, rgba(122, 162, 255, 0.04), transparent 60%),
       var(--bg);
     color: var(--fg);
-    font-family: var(--mono);
-    font-size: 15px;
-    line-height: 1.7;
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.75;
     -webkit-font-smoothing: antialiased;
   }
   ::selection { background: var(--selection); color: #eafff1; }
+
+  /* Văn bản dài dùng sans cho dễ đọc; phần "terminal" giữ mono */
+  .topbar, h1, h2, h3, pre, code, kbd, footer,
+  .hero .kicker, .hero .meta, .hero .tags,
+  .callout .label, .compare .label, .num, .prompt,
+  .toc > summary, .sidebar ol > li > a::before,
+  .qa .q::before, .qa .a::before, .qa .better::before,
+  .checklist li::before, .copy-btn {
+    font-family: var(--mono);
+  }
 
   a {
     color: var(--accent);
@@ -58,7 +70,7 @@
     border-bottom: 1px solid var(--line);
   }
   .topbar-inner {
-    max-width: 1280px; margin: 0 auto;
+    max-width: 1080px; margin: 0 auto;
     padding: 10px 24px;
     display: flex; align-items: center; gap: 16px;
     font-size: 13px;
@@ -79,8 +91,8 @@
   @keyframes blink { 50% { opacity: 0; } }
 
   .layout {
-    max-width: 1280px; margin: 0 auto;
-    display: grid; grid-template-columns: 280px 1fr;
+    max-width: 1080px; margin: 0 auto;
+    display: grid; grid-template-columns: 260px minmax(0, 1fr);
     gap: 32px; padding: 32px 24px 80px;
   }
   @media (max-width: 980px) {
@@ -95,15 +107,28 @@
     overflow-y: auto;
     padding-right: 8px;
     font-size: 13px;
+    line-height: 1.5;
   }
   .sidebar::-webkit-scrollbar { width: 6px; }
   .sidebar::-webkit-scrollbar-thumb { background: var(--line-2); border-radius: 3px; }
-  .sidebar h4 {
+  .toc > summary {
+    list-style: none; cursor: default;
     margin: 0 0 12px;
     font-size: 12px; letter-spacing: 0.12em;
     text-transform: uppercase; color: var(--fg-mute);
   }
-  .sidebar ol { list-style: none; padding: 0; margin: 0; counter-reset: toc; }
+  .toc > summary::-webkit-details-marker { display: none; }
+  @media (max-width: 980px) {
+    .toc {
+      border: 1px solid var(--line); border-radius: var(--radius);
+      background: var(--bg-card); padding: 10px 14px;
+    }
+    .toc > summary { cursor: pointer; margin: 0; color: var(--accent); }
+    .toc > summary::before { content: "▸ "; }
+    .toc[open] > summary { margin-bottom: 12px; }
+    .toc[open] > summary::before { content: "▾ "; }
+  }
+  .sidebar ol { list-style: none; padding: 0; margin: 0; counter-reset: toc -1; }
   .sidebar ol > li { counter-increment: toc; margin-bottom: 4px; }
   .sidebar ol > li > a {
     display: block; padding: 4px 8px;
@@ -123,11 +148,12 @@
   .sidebar ul { list-style: none; padding-left: 18px; margin: 2px 0 6px; }
   .sidebar ul li a {
     display: block; padding: 2px 8px;
-    font-size: 12px; color: var(--fg-mute); border: none;
+    font-size: 12.5px; color: var(--fg-mute); border: none;
   }
   .sidebar ul li a:hover { color: var(--accent-2); }
 
   main { min-width: 0; }
+  .anchor { display: block; }
   .hero {
     border: 1px solid var(--line);
     background: linear-gradient(180deg, var(--bg-soft) 0%, var(--bg-card) 100%);
@@ -143,7 +169,7 @@
   }
   .hero .kicker {
     color: var(--accent); font-size: 12px;
-    letter-spacing: 0.15em; text-transform: uppercase;
+    letter-spacing: 0.05em;
     margin-bottom: 8px;
   }
   .hero h1 {
@@ -165,7 +191,6 @@
     background: var(--bg-card);
     border-radius: var(--radius);
     padding: 24px 32px; margin-bottom: 20px;
-    scroll-margin-top: 70px;
   }
   section h2 {
     margin: 0 0 16px; font-size: 22px; color: #eaf3ec;
@@ -193,7 +218,7 @@
   }
 
   code, kbd {
-    font-family: var(--mono); font-size: 0.9em;
+    font-size: 0.88em;
     background: #0a1019; border: 1px solid var(--line-2);
     border-radius: 3px; padding: 1px 6px; color: var(--accent-2);
   }
@@ -215,10 +240,9 @@
   .callout.note .label { color: var(--accent-3); }
 
   .compare {
-    display: grid; grid-template-columns: 1fr 1fr;
+    display: grid; grid-template-columns: 1fr;
     gap: 14px; margin: 14px 0;
   }
-  @media (max-width: 720px) { .compare { grid-template-columns: 1fr; } }
   .compare > div {
     border-radius: var(--radius); border: 1px solid var(--line-2);
     padding: 14px 16px; background: var(--bg-soft);
@@ -232,9 +256,9 @@
   .compare .bad  .label { color: var(--danger); }
   .compare .good .label { color: var(--accent); }
   .compare pre {
-    margin: 0; padding: 10px; background: #06090d;
-    border-radius: 3px; color: var(--fg-dim);
-    font-size: 12.5px; white-space: pre-wrap;
+    margin: 0; padding: 12px; background: #06090d;
+    border-radius: 3px; color: var(--fg);
+    font-size: 14px; line-height: 1.6; white-space: pre-wrap;
     word-break: break-word; overflow-x: auto;
   }
 
@@ -242,15 +266,20 @@
     margin: 12px 0; border: 1px solid var(--line-2);
     border-radius: var(--radius); overflow: hidden;
   }
-  .qa .q, .qa .a { padding: 10px 14px; }
+  .qa .q, .qa .a, .qa .better { padding: 10px 14px; }
   .qa .q {
     background: rgba(255,107,107,0.06);
     border-bottom: 1px solid var(--line-2);
     color: #f0d6d6;
   }
   .qa .a { color: var(--fg-dim); }
+  .qa .better {
+    border-top: 1px solid var(--line-2);
+    background: rgba(94,243,140,0.04);
+  }
   .qa .q::before { content: "Q › "; color: var(--danger); font-weight: 600; }
   .qa .a::before { content: "A › "; color: var(--accent); font-weight: 600; }
+  .qa .better::before { content: "Nên hỏi › "; color: var(--accent); font-weight: 600; }
 
   .checklist { list-style: none; padding-left: 0; }
   .checklist li {
@@ -261,10 +290,33 @@
     color: var(--accent); font-weight: 600;
     width: 32px;
   }
-  .checklist li:hover::before { content: "[x]"; }
+
+  .template { position: relative; margin: 14px 0; }
+  .template pre {
+    margin: 0; padding: 44px 16px 16px; background: #06090d;
+    border: 1px solid var(--line-2); border-radius: var(--radius);
+    color: var(--fg); font-size: 14px; line-height: 1.6;
+    white-space: pre-wrap; word-break: break-word;
+  }
+  .copy-btn {
+    position: absolute; top: 10px; right: 10px;
+    background: var(--bg-soft); color: var(--accent);
+    border: 1px solid var(--line-2); border-radius: 3px;
+    padding: 4px 10px; font-size: 12px; cursor: pointer;
+  }
+  .copy-btn:hover { border-color: var(--accent); }
 
   hr {
     border: none; border-top: 1px dashed var(--line-2); margin: 24px 0;
+  }
+
+  /* Màn nhỏ: bớt padding lồng nhau để khung code không bị ép quá hẹp */
+  @media (max-width: 600px) {
+    .layout { padding: 16px 12px 60px; }
+    .hero { padding: 20px 18px; }
+    section { padding: 20px 16px; }
+    .compare > div { padding: 10px; }
+    .compare pre { padding: 10px; }
   }
 
   footer {
@@ -283,7 +335,7 @@
 <div class="topbar">
   <div class="topbar-inner">
     <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
-    <span class="path">~/docs/<span>how-to-ask-questions-smartly.vi</span></span>
+    <span class="path">~/docs/<span>notes-on-smart-questions</span></span>
     <span class="right">utf-8 · vi-VN · esr+moen<span class="blink"></span></span>
   </div>
 </div>
@@ -291,70 +343,82 @@
 <div class="layout">
 
   <aside class="sidebar">
-    <h4>// Mục lục</h4>
-    <ol>
-      <li><a href="#disclaimer">Tuyên bố miễn trừ</a></li>
-      <li><a href="#intro">Mở đầu</a></li>
-      <li><a href="#ai-context">AI giúp gì, khi nào hỏi người khác</a></li>
-      <li><a href="#before-ask">Trước khi hỏi</a></li>
-      <li><a href="#when-ask">Khi hỏi</a>
-        <ul>
-          <li><a href="#forum">Chọn forum cẩn thận</a></li>
-          <li><a href="#stackoverflow">Stack Overflow</a></li>
-          <li><a href="#web-chat">Web / Discord / IRC</a></li>
-          <li><a href="#mailing">Mailing list & GitHub Issues</a></li>
-          <li><a href="#subject">Tiêu đề rõ ràng</a></li>
-          <li><a href="#easy-reply">Dễ trả lời</a></li>
-          <li><a href="#grammar">Viết đúng chính tả</a></li>
-          <li><a href="#format">Định dạng chuẩn</a></li>
-          <li><a href="#precise">Chính xác & đủ thông tin</a></li>
-          <li><a href="#volume">Lượng ≠ chính xác</a></li>
-          <li><a href="#bug-claim">Đừng vội kêu là bug</a></li>
-          <li><a href="#grovelling">Nịnh không thay được tự học</a></li>
-          <li><a href="#symptoms">Triệu chứng, không phỏng đoán</a></li>
-          <li><a href="#chrono">Trình tự thời gian</a></li>
-          <li><a href="#xy-problem">Mục tiêu, không phải bước (XY)</a></li>
-          <li><a href="#no-private">Đừng đòi reply riêng</a></li>
-          <li><a href="#explicit">Câu hỏi rõ ràng</a></li>
-          <li><a href="#about-code">Khi hỏi về code</a></li>
-          <li><a href="#homework">Đừng post bài tập</a></li>
-          <li><a href="#prune">Cắt phần thừa</a></li>
-          <li><a href="#urgent">Đừng gắn "Khẩn"</a></li>
-          <li><a href="#courtesy">Lịch sự không thừa</a></li>
-          <li><a href="#followup">Báo lại lời giải</a></li>
-        </ul>
-      </li>
-      <li><a href="#interpret">Đọc câu trả lời</a>
-        <ul>
-          <li><a href="#rtfm">RTFM &amp; STFW</a></li>
-          <li><a href="#not-understand">Nếu không hiểu</a></li>
-          <li><a href="#rudeness">Đối phó "thô lỗ"</a></li>
-          <li><a href="#loser">Đừng phản ứng như kẻ thua</a></li>
-        </ul>
-      </li>
-      <li><a href="#dont-ask">Câu hỏi không nên hỏi</a></li>
-      <li><a href="#good-bad">Câu hỏi hay vs dở</a></li>
-      <li><a href="#no-answer">Nếu không có ai trả lời</a></li>
-      <li><a href="#how-answer">Cách trả lời câu hỏi</a></li>
-      <li><a href="#resources">Tài nguyên liên quan</a></li>
-      <li><a href="#thanks">Lời cảm ơn</a></li>
-    </ol>
+    <details class="toc" open>
+      <summary>// Mục lục</summary>
+      <ol>
+        <li><a href="#tldr">Tóm tắt 30 giây</a></li>
+        <li><a href="#disclaimer">Nếu ai đó gửi bạn link này</a></li>
+        <li><a href="#intro">Mở đầu</a></li>
+        <li><a href="#ai-context">AI giúp gì, khi nào hỏi người khác</a></li>
+        <li><a href="#before-ask">Trước khi hỏi</a></li>
+        <li><a href="#where-to-ask">Chọn nơi hỏi</a>
+          <ul>
+            <li><a href="#forum">Chọn forum cẩn thận</a></li>
+            <li><a href="#stackoverflow">Stack Overflow</a></li>
+            <li><a href="#web-chat">Web / Discord / IRC</a></li>
+            <li><a href="#mailing">Mailing list & GitHub Issues</a></li>
+          </ul>
+        </li>
+        <li><a href="#writing">Viết câu hỏi</a>
+          <ul>
+            <li><a href="#subject">Tiêu đề rõ ràng</a></li>
+            <li><a href="#xy-problem">Nêu mục tiêu trước (XY)</a></li>
+            <li><a href="#precise">Chính xác & đủ thông tin</a></li>
+            <li><a href="#symptoms">Triệu chứng, không phỏng đoán</a></li>
+            <li><a href="#chrono">Trình tự thời gian</a></li>
+            <li><a href="#about-code">Khi hỏi về code (MRE)</a></li>
+            <li><a href="#volume">Chọn đúng phần log</a></li>
+            <li><a href="#format">Định dạng chuẩn</a></li>
+            <li><a href="#grammar">Viết rõ ràng</a></li>
+            <li><a href="#explicit">Hỏi cụ thể, có giới hạn</a></li>
+            <li><a href="#prune">Bỏ câu hỏi thừa ở cuối</a></li>
+          </ul>
+        </li>
+        <li><a href="#attitude">Thái độ khi hỏi</a>
+          <ul>
+            <li><a href="#bug-claim">Đừng vội kêu là bug</a></li>
+            <li><a href="#grovelling">Nịnh không thay được tự học</a></li>
+            <li><a href="#urgent">Đừng gắn "Khẩn"</a></li>
+            <li><a href="#courtesy">Lịch sự vừa đủ</a></li>
+            <li><a href="#no-private">Hỏi công khai</a></li>
+            <li><a href="#homework">Đừng post bài tập</a></li>
+            <li><a href="#followup">Báo lại lời giải</a></li>
+          </ul>
+        </li>
+        <li><a href="#interpret">Đọc câu trả lời</a>
+          <ul>
+            <li><a href="#rtfm">RTFM &amp; STFW</a></li>
+            <li><a href="#not-understand">Nếu không hiểu</a></li>
+            <li><a href="#rudeness">Đối phó "thô lỗ"</a></li>
+            <li><a href="#loser">Đừng phản ứng như kẻ thua</a></li>
+          </ul>
+        </li>
+        <li><a href="#dont-ask">Câu hỏi không nên hỏi</a></li>
+        <li><a href="#good-bad">Câu hỏi tốt và dở</a></li>
+        <li><a href="#template">Mẫu câu hỏi</a></li>
+        <li><a href="#no-answer">Nếu không có ai trả lời</a></li>
+        <li><a href="#how-answer">Cách trả lời câu hỏi</a></li>
+        <li><a href="#resources">Tài nguyên liên quan</a></li>
+        <li><a href="#thanks">Lời cảm ơn</a></li>
+      </ol>
+    </details>
   </aside>
 
   <main>
 
     <div class="hero">
-      <div class="kicker">$ cat smart-questions.vi.md</div>
+      <div class="kicker">$ cat notes-on-smart-questions.md</div>
       <h1>Cách Hỏi Để <span class="amp">Người Khác Muốn Giúp</span></h1>
       <p style="margin:0;color:var(--fg-dim);">
-        Bản viết lại tiếng Việt hiện đại của bài <em>“How To Ask Questions The Smart Way”</em>
-        của Eric S. Raymond &amp; Rick Moen. Giữ nguyên tinh thần, cập nhật ví dụ
-        cho thời Discord/GitHub/Stack Overflow/LLM.
+        Hướng dẫn tiếng Việt dựa trên bài <em>“How To Ask Questions The Smart Way”</em>
+        của Eric S. Raymond &amp; Rick Moen: tóm tắt, bình luận và bổ sung ví dụ
+        cho thời Discord/GitHub/Stack Overflow/LLM. Không phải bản dịch. Ví dụ viết bằng tiếng Anh,
+        đúng như thứ bạn sẽ đăng lên cộng đồng quốc tế.
       </p>
       <div class="meta">
         Tác giả gốc: <span>Eric Steven Raymond</span> · <span>Rick Moen</span><br>
-        Nguồn: <a href="http://www.catb.org/~esr/faqs/smart-questions.html" target="_blank" rel="noopener">catb.org/~esr/faqs/smart-questions.html</a><br>
-        Bản tiếng Việt: viết lại cô đọng, không phải bản dịch từng câu.
+        Nguồn: <a href="http://www.catb.org/~esr/faqs/smart-questions.html" target="_blank" rel="noopener">catb.org/~esr/faqs/smart-questions.html</a> · dựa trên <span>Revision 3.10</span> (21/05/2014)<br>
+        Hướng dẫn này: không phải bản dịch hay phiên bản chính thức. Viết lần đầu <span>12/05/2026</span> · cập nhật <span>02/10/2026</span>.
       </div>
       <div class="tags">
         <span class="tag">#hacker-culture</span>
@@ -365,18 +429,31 @@
       </div>
     </div>
 
+    <section id="tldr">
+      <h2><span class="num">[00]</span> Tóm tắt 30 giây</h2>
+      <ol>
+        <li><strong>Tự tìm trước:</strong> đọc docs, tìm issue cũ, Google thông báo lỗi, hỏi AI. (<a href="#before-ask">chi tiết</a>)</li>
+        <li><strong>Hỏi đúng chỗ, hỏi công khai.</strong> (<a href="#where-to-ask">chi tiết</a>)</li>
+        <li><strong>Tiêu đề</strong> = tool + version + triệu chứng cụ thể. (<a href="#subject">chi tiết</a>)</li>
+        <li><strong>Nêu mục tiêu, môi trường, kỳ vọng và thực tế, những gì đã thử.</strong> (<a href="#precise">chi tiết</a>)</li>
+        <li><strong>Kèm MRE</strong> và đúng phần log liên quan, đặt trong code block. (<a href="#about-code">chi tiết</a>)</li>
+        <li><strong>Lịch sự ngắn gọn</strong>, không gắn “URGENT”, giải xong thì quay lại báo lời giải. (<a href="#attitude">chi tiết</a>)</li>
+      </ol>
+      <p>Muốn dùng ngay: copy <a href="#template">mẫu câu hỏi</a> ở mục [11].</p>
+    </section>
+
     <section id="disclaimer">
-      <h2><span class="num">[00]</span> Tuyên bố miễn trừ</h2>
-      <p><span class="prompt">$</span> Nhiều dự án mã nguồn mở link đến bài viết này ở mục “Hướng dẫn đặt câu hỏi cho cộng đồng”. Đó là chuyện tốt — nhưng nếu bạn được dẫn tới đây vì <em>vừa mới hỏi một câu dở</em>, đừng nghĩ rằng cả cộng đồng đang chĩa mũi dùi vào mặt mình.</p>
-      <p>Bài này không nhằm <em>tát vào mặt</em> bạn. Nó chỉ chỉ ra: muốn nhận được giúp đỡ chất lượng từ những người bận và không quen biết, bạn cần biết cách hỏi. Đọc xong, bạn sẽ giúp được chính mình và giúp được người trả lời.</p>
+      <h2><span class="num">[01]</span> Nếu ai đó gửi bạn link này</h2>
+      <p><span class="prompt">$</span> Nhiều dự án mã nguồn mở link đến bài của ESR ở mục “Hướng dẫn đặt câu hỏi cho cộng đồng”. Đó là chuyện tốt — nhưng nếu bạn được dẫn tới đây vì <em>vừa mới hỏi một câu dở</em>, đừng nghĩ rằng cả cộng đồng đang chĩa mũi dùi vào mình.</p>
+      <p>Bài này không nhằm <em>tát vào mặt</em> bạn. Nó chỉ muốn nói rằng: muốn nhận được giúp đỡ chất lượng từ những người bận và không quen biết, bạn cần biết cách hỏi. Đọc xong, bạn sẽ giúp được chính mình và giúp được người trả lời.</p>
       <div class="callout note">
         <span class="label">// note</span>
-        Bài viết là tác phẩm chung của Eric S. Raymond (tác giả <em>The Cathedral and the Bazaar</em>) và Rick Moen. Bản tiếng Việt bạn đang đọc là <strong>viết lại cô đọng</strong>, không phải dịch nguyên văn.
+        Bài gốc là tác phẩm chung của Eric S. Raymond (tác giả <em>The Cathedral and the Bazaar</em>) và Rick Moen. Trang bạn đang đọc là <strong>hướng dẫn dựa trên và bình luận về bài gốc</strong>, không phải bản dịch. Các mục [00], [03] và [11] là phần bổ sung riêng, ví dụ trong bài cũng được viết mới. Muốn đọc nguyên văn, hãy đọc <a href="http://www.catb.org/~esr/faqs/smart-questions.html" target="_blank" rel="noopener">bài gốc</a>.
       </div>
     </section>
 
     <section id="intro">
-      <h2><span class="num">[01]</span> Mở đầu</h2>
+      <h2><span class="num">[02]</span> Mở đầu</h2>
       <p>Trong thế giới hacker — hiểu theo nghĩa <em>người làm chủ kỹ thuật, viết phần mềm và yêu tự do thông tin</em>, không phải “kẻ phá hoại máy tính người khác” — câu trả lời bạn nhận được phụ thuộc trực tiếp vào cách bạn đặt câu hỏi.</p>
       <p>Hacker thường có những đặc điểm sau:</p>
       <ul>
@@ -392,7 +469,7 @@
     </section>
 
     <section id="ai-context">
-      <h2><span class="num">[02]</span> AI giúp gì, khi nào vẫn nên hỏi người khác</h2>
+      <h2><span class="num">[03]</span> AI giúp gì, khi nào vẫn nên hỏi người khác</h2>
       <p>Ở thời điểm hiện tại, dev mới có lợi thế rất lớn: bạn có thể hỏi ChatGPT, Claude, Cursor, Gemini... để tự debug, đọc lỗi, giải thích khái niệm, viết test nhỏ, hoặc tạo một checklist kiểm tra trước khi làm phiền người khác.</p>
       <p>Nhưng AI không thay thế hoàn toàn cộng đồng hay người có kinh nghiệm. Sẽ có lúc bạn vẫn nên hỏi người khác, đặc biệt khi:</p>
       <ul>
@@ -405,33 +482,34 @@
       </ul>
       <div class="callout tip">
         <span class="label">// tip</span>
-        Dùng AI như vòng debug đầu tiên. Khi hỏi người khác, hãy mang theo phần bạn đã hỏi AI, điều bạn đã kiểm chứng, và chỗ bạn vẫn còn nghi ngờ. Như vậy câu hỏi của bạn rõ hơn, và người trả lời đỡ phải bắt đầu từ số không.
+        Dùng AI như một vòng debug trước khi hỏi người. Khi hỏi người khác, hãy mang theo phần bạn đã hỏi AI, điều bạn đã kiểm chứng, và chỗ bạn vẫn còn nghi ngờ. Như vậy câu hỏi của bạn rõ hơn, và người trả lời đỡ phải bắt đầu từ số không.
       </div>
     </section>
 
     <section id="before-ask">
-      <h2><span class="num">[03]</span> Trước khi hỏi</h2>
+      <h2><span class="num">[04]</span> Trước khi hỏi</h2>
       <p>Trước khi bạn đặt một câu hỏi kỹ thuật trên Discord, Stack Overflow, GitHub Issues hay bất kỳ nơi nào, hãy lần lượt làm những việc sau:</p>
 
       <ol class="checklist">
-        <li><strong>Đọc tài liệu / RTFM.</strong> Đọc <code>README</code>, <code>docs/</code>, FAQ, manual của tool.</li>
+        <li><strong>Đọc tài liệu.</strong> Đọc <code>README</code>, <code>docs/</code>, FAQ, manual của tool.</li>
         <li><strong>Tìm trong archive.</strong> Tìm trong issue cũ (đóng &amp; mở), Stack Overflow, mailing list archive.</li>
-        <li><strong>Google nó.</strong> Copy nguyên thông báo lỗi vào ô search. 80% trường hợp đã có người gặp.</li>
-        <li><strong>Hỏi AI / LLM trước.</strong> Hiện tại ChatGPT, Claude, Cursor, Gemini... giải được khá nhiều bug phổ thông. Hỏi nó cho bạn dạng phỏng vấn 1-1, không tốn thời gian của người khác.</li>
-        <li><strong>Tự thử nghiệm.</strong> Đọc code nguồn nếu có. In log. Tạo MRE (Minimal Reproducible Example).</li>
+        <li><strong>Google nó.</strong> Copy nguyên thông báo lỗi vào ô search. Rất có thể đã có người gặp trước bạn.</li>
+        <li><strong>Hỏi AI / LLM.</strong> ChatGPT, Claude, Cursor, Gemini... giải được khá nhiều bug phổ thông. AI trả lời riêng cho bạn, hỏi lại bao nhiêu lần cũng được mà không tốn thời gian của ai.</li>
+        <li><strong>Tự thử nghiệm.</strong> Đọc code nguồn nếu có. In log. Tạo một ví dụ tối giản tái hiện lỗi (<a href="#about-code">MRE</a>).</li>
         <li><strong>Hỏi một người bạn thạo việc.</strong> Trước khi hỏi cả thế giới, hỏi một người cụ thể nếu có.</li>
       </ol>
 
-      <p>Khi đã làm hết những bước trên mà vẫn bí — <em>lúc đó</em> hãy mang câu hỏi đến cộng đồng. Hãy nói luôn rằng bạn đã thử những gì. Câu mở đầu kiểu “Tôi đã đọc X, thử Y và Z, kết quả là…” khiến bạn ngay lập tức được xếp vào nhóm <strong>người đáng giúp</strong>.</p>
+      <p>Khi đã làm hết những bước trên mà vẫn bí — <em>lúc đó</em> hãy mang câu hỏi đến cộng đồng. Hãy nói luôn rằng bạn đã thử những gì. Câu mở đầu kiểu <em>“I read X, tried Y and Z, and got…”</em> khiến bạn ngay lập tức được xếp vào nhóm <strong>người đáng giúp</strong>.</p>
 
       <div class="callout warn">
         <span class="label">// warn</span>
-        Đừng hỏi điều mà <code>man</code> hoặc trang đầu Google trả lời trong 30 giây. Đó là cách nhanh nhất để bị bỏ qua hoặc bị bảo “RTFM”.
+        Đừng hỏi điều mà <code>man</code> hoặc trang đầu Google trả lời trong 30 giây. Đó là cách nhanh nhất để bị bỏ qua hoặc bị bảo “RTFM” (<a href="#rtfm">nghĩa là gì?</a>).
       </div>
     </section>
 
-    <section id="when-ask">
-      <h2><span class="num">[04]</span> Khi hỏi</h2>
+    <span id="when-ask" class="anchor"></span>
+    <section id="where-to-ask">
+      <h2><span class="num">[05]</span> Chọn nơi hỏi</h2>
 
       <h3 id="forum">Chọn forum cẩn thận</h3>
       <p>Đăng câu hỏi sai chỗ là cách nhanh nhất để không nhận được trả lời. Một số nguyên tắc:</p>
@@ -443,8 +521,8 @@
       </ul>
 
       <h3 id="stackoverflow">Stack Overflow / Stack Exchange</h3>
-      <p>Với phần lớn câu hỏi lập trình thuần kỹ thuật, <strong>Stack Overflow là điểm đến đầu tiên</strong>. Hãy <em>tìm</em> trước. Khoảng 80% câu hỏi mới là trùng với câu cũ.</p>
-      <p>Khi đăng câu hỏi mới: dùng tag chính xác, viết tiêu đề như một câu hỏi cụ thể, kèm <strong>code MRE</strong> chạy được, kèm <strong>thông báo lỗi đầy đủ</strong>, và nêu rõ <strong>bạn kỳ vọng gì &amp; nhận được gì</strong>.</p>
+      <p>Với phần lớn câu hỏi lập trình thuần kỹ thuật, khi cần hỏi công khai thì <strong>Stack Overflow thường là nơi phù hợp nhất</strong>. Hãy <em>tìm</em> trước: rất nhiều câu hỏi mới thật ra đã có người hỏi rồi.</p>
+      <p>Khi đăng câu hỏi mới: dùng tag chính xác, viết tiêu đề như một câu hỏi cụ thể, kèm <strong><a href="#about-code">MRE</a></strong> chạy được, kèm <strong>thông báo lỗi đầy đủ</strong>, và nêu rõ <strong>bạn kỳ vọng gì &amp; nhận được gì</strong>.</p>
 
       <h3 id="web-chat">Web forum / Discord / Slack / IRC</h3>
       <p>Các kênh chat real-time (Discord, Slack, IRC, Telegram…) phù hợp với <strong>thảo luận nhanh</strong>, không phù hợp với câu hỏi phức tạp cần lưu trữ. Lưu ý:</p>
@@ -461,76 +539,34 @@
         <li><strong>GitHub Issues / Discussions</strong>: cho bug và câu hỏi về dự án.</li>
         <li><strong>Mailing list dev/user</strong>: vẫn tồn tại trong nhiều dự án lâu năm (Linux kernel, Postgres, Debian…).</li>
       </ul>
-      <p>Đừng nhầm <em>user list</em> với <em>dev list</em>. Hỏi “tại sao tool này crash khi tôi click” trên dev list = bạn đang lãng phí thời gian của những người viết ra tool đó.</p>
+      <p>Đừng nhầm <em>user list</em> với <em>dev list</em>. Hỏi <em>“Why does the app crash when I click Save?”</em> trên dev list là đang lấy thời gian của chính những người viết ra tool đó.</p>
+    </section>
+
+    <section id="writing">
+      <h2><span class="num">[06]</span> Viết câu hỏi</h2>
+      <p>Phần này đi theo đúng thứ tự bạn viết một câu hỏi: tiêu đề, mục tiêu, thông tin, code, rồi soát lại cách trình bày.</p>
 
       <h3 id="subject">Tiêu đề rõ ràng, cụ thể</h3>
       <div class="compare">
         <div class="bad">
-          <span class="label">Tệ</span>
+          <span class="label">Dở</span>
 <pre>HELP!!!
-loi gi vay
-Khong chay duoc
+not working
 Question
-Bug</pre>
+Bug??
+pls help urgent</pre>
         </div>
         <div class="good">
           <span class="label">Tốt</span>
-<pre>X11 mouse cursor distorted on Nvidia 4090
-with kernel 6.7
+<pre>X11 mouse cursor distorted on Nvidia RTX 4090 with kernel 6.7
 
-Postgres 16: pg_dump fails with SSL
-SYSCALL EOF on tables > 2GB
+Postgres 16: pg_dump fails with "SSL SYSCALL error: EOF detected" on tables > 2GB
 
-Next.js 14 RSC: hydration mismatch only
-on Safari iOS</pre>
+Next.js 14 (App Router): hydration mismatch only on iOS Safari</pre>
         </div>
       </div>
+      <p>Công thức: <code>[tool + version]: [triệu chứng cụ thể] [khi nào / điều kiện gì]</code>. Tiêu đề dở không cho người đọc biết gì. Tiêu đề tốt cho biết ngay đây là tool nào, lỗi gì, xảy ra khi nào — nên đúng người biết sẽ bấm vào.</p>
       <p>Mẹo: viết tiêu đề như một dòng <em>commit message</em> — ngắn, cụ thể, đúng trọng tâm.</p>
-
-      <h3 id="easy-reply">Làm sao cho dễ trả lời</h3>
-      <p>Đừng kết câu hỏi bằng “Vui lòng email riêng cho tôi vì tôi không theo dõi forum này.” Đó là cách bảo: <em>tôi quan trọng hơn cộng đồng của bạn</em>. Người ta sẽ bỏ qua.</p>
-
-      <h3 id="grammar">Viết rõ ràng, đúng chính tả &amp; ngữ pháp</h3>
-      <p>Người viết cẩu thả thường suy nghĩ cẩu thả. Nếu bạn không buồn kiểm tra chính tả, người trả lời sẽ đoán rằng bạn cũng không buồn debug.</p>
-      <p>Không cần văn vẻ hoa mỹ. Chỉ cần <strong>câu hoàn chỉnh</strong>, <strong>dấu câu đúng</strong>, <strong>viết hoa đầu câu</strong>. Nếu không thạo tiếng Anh, nói rõ ngay từ đầu — cộng đồng sẽ rộng lượng. Nhưng đừng <em>tỏ ra lười</em>.</p>
-
-      <h3 id="format">Định dạng chuẩn, dễ đọc</h3>
-      <ul>
-        <li><strong>Code &amp; log dùng code block</strong>, không paste như văn bản thường.</li>
-        <li>Đừng gửi câu hỏi dưới dạng ảnh chụp màn hình của một đoạn text. Người ta không grep được ảnh.</li>
-        <li>Đừng gửi file <code>.docx</code>, <code>.pdf</code> chỉ để chứa 5 dòng code.</li>
-        <li>Wrap code/log dài bằng pastebin / gist / repro repo.</li>
-      </ul>
-
-      <h3 id="precise">Chính xác và đủ thông tin về vấn đề</h3>
-      <p>Trình bày tối thiểu các thông tin sau:</p>
-      <ul>
-        <li><strong>Triệu chứng</strong>: bạn thấy gì? (kèm log/screenshot nếu cần)</li>
-        <li><strong>Môi trường</strong>: OS, version, phần cứng liên quan, version của tool.</li>
-        <li><strong>Bạn đã làm gì để xảy ra điều đó?</strong> (các bước reproduce)</li>
-        <li><strong>Bạn đã thử gì để fix?</strong></li>
-        <li><strong>Bạn kỳ vọng gì?</strong> Vs. <strong>bạn nhận được gì?</strong></li>
-      </ul>
-
-      <h3 id="volume">Lượng thông tin ≠ độ chính xác</h3>
-      <p>Đừng dump cả 5000 dòng log vào tin nhắn. Hãy đọc qua, chọn <em>đúng phần liên quan</em>, kèm context tối thiểu. Một MRE (Minimal Reproducible Example) 20 dòng có giá trị hơn một repo 200 file.</p>
-
-      <h3 id="bug-claim">Đừng vội kêu “đây là bug”</h3>
-      <p>Trừ khi bạn rất chắc, đừng mở đầu bằng “Tool này có bug khi…”. Đa số trường hợp là người dùng dùng sai hoặc hiểu sai. Cách diễn đạt khôn ngoan hơn:</p>
-      <blockquote>
-        “Tôi gặp hành vi sau, không rõ là tôi đang dùng sai hay đây là bug. Tôi kỳ vọng X, nhưng nhận được Y. Phiên bản: …”
-      </blockquote>
-      <p>Cách nói này khiến bạn không phải xin lỗi nếu hóa ra mình sai.</p>
-
-      <h3 id="grovelling">Nịnh không thay được tự học</h3>
-      <p>“Em là người mới, mong các pro chỉ giáo!” không phải tấm vé miễn phí. Người trả lời quan tâm bạn đã <em>cố gắng</em> gì, không phải bạn <em>khiêm tốn</em> tới đâu. Khiêm tốn rỗng = lười + sợ mất mặt.</p>
-
-      <h3 id="symptoms">Mô tả triệu chứng, không phải phỏng đoán</h3>
-      <p>Đừng nói: <em>“tôi nghĩ là do GC của Node bị rò rỉ.”</em> Trừ khi bạn đã profile và có bằng chứng. Hãy nói: <em>“RSS memory tăng đều 5MB/phút trong 2 giờ chạy, đính kèm heap snapshot.”</em></p>
-      <p>Chuyên gia có thể đọc triệu chứng và đoán đúng nguyên nhân. Họ không thể đọc phỏng đoán của bạn và đoán ra triệu chứng.</p>
-
-      <h3 id="chrono">Mô tả theo trình tự thời gian</h3>
-      <p>“Tôi cài A. Sau đó tôi cài B. Sau đó tôi update C. Sau đó X bắt đầu fail.” Có giá trị gấp 10 lần “X đang fail, tôi không biết tại sao.” Nguyên nhân thường nằm ở thay đổi gần nhất.</p>
 
       <h3 id="xy-problem">Mô tả mục tiêu, không phải các bước của bạn (XY Problem)</h3>
       <div class="callout warn">
@@ -539,33 +575,85 @@ on Safari iOS</pre>
       </div>
       <p>Luôn nêu <strong>mục tiêu cuối cùng</strong> trước khi nêu các bước. Người trả lời có thể chỉ cho bạn cách làm X tốt hơn nhiều so với Y.</p>
 
-      <h3 id="no-private">Đừng đòi trả lời qua email riêng</h3>
-      <p>Hỏi công khai → trả lời công khai. Đó là cách kiến thức được lưu lại và giúp được người tiếp theo gặp vấn đề tương tự. Đòi reply riêng = bạn coi cộng đồng như tổng đài cá nhân.</p>
+      <h3 id="precise">Chính xác và đủ thông tin về vấn đề</h3>
+      <p>Trình bày tối thiểu các thông tin sau:</p>
+      <ul>
+        <li><strong>Triệu chứng</strong>: bạn thấy gì? (kèm log/screenshot nếu cần)</li>
+        <li><strong>Môi trường</strong>: OS, version, phần cứng liên quan, version của tool.</li>
+        <li><strong>Bạn đã làm gì để xảy ra điều đó?</strong> (các bước reproduce)</li>
+        <li><strong>Bạn đã thử gì để fix?</strong></li>
+        <li><strong>Bạn kỳ vọng gì, và thực tế nhận được gì?</strong></li>
+      </ul>
+      <p>Muốn khỏi sót, dùng <a href="#template">mẫu câu hỏi</a> ở mục [11].</p>
 
-      <h3 id="explicit">Đặt câu hỏi rõ ràng &amp; có giới hạn</h3>
-      <p>“Có ai có thể giải thích cho tôi về microservices không?” là câu hỏi mở vô tận. Không ai có thời gian. Thu hẹp: “Tôi đang chuyển một monolith Django sang microservices. Cụ thể, làm cách nào để xử lý transaction qua 2 service mà không dùng 2PC?”</p>
+      <h3 id="symptoms">Mô tả triệu chứng, không phải phỏng đoán</h3>
+      <p>Đừng nói: <em>“I think Node's GC is leaking memory.”</em> Trừ khi bạn đã profile và có bằng chứng. Hãy nói: <em>“RSS grows steadily by ~5MB/min over 2 hours. Heap snapshot attached.”</em></p>
+      <p>Chuyên gia có thể đọc triệu chứng và đoán đúng nguyên nhân. Họ không thể đọc phỏng đoán của bạn và đoán ra triệu chứng.</p>
+
+      <h3 id="chrono">Mô tả theo trình tự thời gian</h3>
+      <p><em>“I installed A, then B, then upgraded C. After that, X started failing.”</em> có giá trị hơn nhiều so với <em>“X is failing and I don't know why.”</em> Nguyên nhân thường nằm ở thay đổi gần nhất.</p>
 
       <h3 id="about-code">Khi hỏi về code</h3>
+      <p><strong>MRE (Minimal Reproducible Example)</strong> là đoạn code <em>nhỏ nhất chạy được</em> mà vẫn tái hiện đúng lỗi — thường khoảng 20 dòng, bỏ hết phần không liên quan. Đây là thứ giá trị nhất bạn có thể kèm theo câu hỏi. Nhiều khi, ngay trong lúc rút gọn, bạn đã tự tìm ra lỗi.</p>
       <ul>
-        <li>Cung cấp một <strong>MRE</strong> — đoạn code <em>nhỏ nhất chạy được</em> mà tái hiện lỗi.</li>
+        <li>Kèm MRE: dán thẳng vào code block, hoặc link tới repo / StackBlitz / gist.</li>
         <li>Nói rõ bạn kỳ vọng output gì, thực tế output gì.</li>
         <li>Đính kèm phiên bản ngôn ngữ, OS, build tool.</li>
-        <li>Đừng paste cả project. Cô đặc trước, đăng sau.</li>
-        <li>Nếu code đã chạy &amp; build, hãy nói rõ.</li>
+        <li>Đừng paste cả project. Rút gọn trước, đăng sau.</li>
+        <li>Nói rõ lỗi xảy ra lúc build hay lúc chạy.</li>
       </ul>
 
-      <h3 id="homework">Đừng post bài tập về nhà</h3>
-      <p>Hacker phát hiện ra <em>bài tập trên lớp</em> rất nhanh. Việc làm bài hộ không giúp bạn học. Nếu bạn thực sự kẹt, hãy nói rõ bạn đang học, đã thử cách nào, bí ở bước nào — chứ không phải đăng nguyên đề bài rồi chờ ai đó submit hộ.</p>
+      <h3 id="volume">Nhiều thông tin chưa chắc đã đúng trọng tâm</h3>
+      <p>Đừng dump cả 5000 dòng log vào tin nhắn. Hãy đọc qua, chọn <em>đúng phần liên quan</em>, kèm context tối thiểu. Một <a href="#about-code">MRE</a> 20 dòng có giá trị hơn một repo 200 file.</p>
 
-      <h3 id="prune">Cắt bỏ phần thừa</h3>
-      <p>Đừng kết thúc bằng kiểu “Vui lòng hồi đáp giúp em, em rất mong nhận được sự giúp đỡ ạ. Em xin chân thành cảm ơn các tiền bối.” Lịch sự là cần, nhưng spam lời chào không giúp câu hỏi tốt hơn. Đi thẳng vào vấn đề.</p>
+      <h3 id="format">Định dạng chuẩn, dễ đọc</h3>
+      <ul>
+        <li><strong>Code &amp; log dùng code block</strong>, không paste như văn bản thường.</li>
+        <li>Đừng gửi câu hỏi dưới dạng ảnh chụp màn hình của một đoạn text. Người ta không grep được ảnh.</li>
+        <li>Đừng gửi file <code>.docx</code>, <code>.pdf</code> chỉ để chứa 5 dòng code.</li>
+        <li>Code/log dài thì đưa lên gist / pastebin / repo tái hiện lỗi rồi gửi link.</li>
+      </ul>
+
+      <h3 id="grammar">Viết rõ ràng, đúng chính tả &amp; ngữ pháp</h3>
+      <p>Người viết cẩu thả thường suy nghĩ cẩu thả. Nếu bạn không buồn kiểm tra chính tả, người trả lời sẽ đoán rằng bạn cũng không buồn debug.</p>
+      <p>Không cần văn vẻ hoa mỹ. Chỉ cần <strong>câu hoàn chỉnh</strong>, <strong>dấu câu đúng</strong>, <strong>viết hoa đầu câu</strong>. Nếu không thạo tiếng Anh, nói rõ ngay từ đầu — cộng đồng sẽ rộng lượng. Có thể nhờ AI hoặc công cụ dịch sửa câu cho rõ, nhưng giữ nguyên code, log và thông báo lỗi. Đừng <em>tỏ ra lười</em>.</p>
+
+      <h3 id="explicit">Đặt câu hỏi rõ ràng &amp; có giới hạn</h3>
+      <p><em>“Can someone explain microservices to me?”</em> là câu hỏi mở vô tận. Không ai có thời gian. Thu hẹp lại: <em>“I'm splitting a Django monolith into services. How do I handle a transaction that spans two services without using two-phase commit (2PC)?”</em></p>
+
+      <h3 id="prune">Bỏ những câu hỏi thừa ở cuối</h3>
+      <p>Đừng kết bài bằng những câu không có nội dung như <em>“Can anyone help me?”</em> hay <em>“Is there an answer?”</em>. Nếu phần mô tả đã ổn thì mấy câu này thừa. Tệ hơn, chúng dễ nhận lại câu trả lời đúng về logic nhưng vô ích: <em>“Yes, you can be helped.”</em></p>
+      <p>Thay vào đó, kết bằng đúng câu bạn muốn được trả lời: <em>“What's the right way to configure X so that Y?”</em></p>
+    </section>
+
+    <section id="attitude">
+      <h2><span class="num">[07]</span> Thái độ khi hỏi</h2>
+
+      <h3 id="bug-claim">Đừng vội kêu “đây là bug”</h3>
+      <p>Trừ khi bạn rất chắc, đừng mở đầu bằng “Tool này có bug khi…”. Đa số trường hợp là người dùng dùng sai hoặc hiểu sai. Cách diễn đạt khôn ngoan hơn:</p>
+      <blockquote>
+        “I'm seeing the following behavior and I'm not sure whether I'm using it wrong or it's a bug. I expected X, but got Y. Version: …”
+      </blockquote>
+      <p>Nếu hóa ra bạn dùng sai, cách nói này giúp bạn không bị mất mặt.</p>
+
+      <h3 id="grovelling">Nịnh không thay được tự học</h3>
+      <p><em>“I'm a beginner, please help me experts!”</em> không phải tấm vé miễn phí. Người trả lời quan tâm bạn đã <em>cố gắng</em> gì, không phải bạn <em>khiêm tốn</em> tới đâu. Khiêm tốn thì tốt, nhưng nó không thay được việc cho thấy bạn đã thử những gì.</p>
 
       <h3 id="urgent">Đừng gắn nhãn “KHẨN” / “URGENT”</h3>
       <p>Việc của bạn khẩn — không phải việc của người trả lời. Gắn “urgent” thường có tác dụng ngược: câu hỏi của bạn sẽ bị bỏ qua, vì bạn đang yêu cầu ưu tiên mà không có quyền.</p>
-      <p>Ngoại lệ: nếu thực sự có yếu tố thời gian khách quan (vd. server production của tổ chức nhân đạo sập trước deadline cứu trợ), giải thích bối cảnh đó — không chỉ gắn nhãn.</p>
+      <p>Ngoại lệ: lỗ hổng bảo mật có nguy cơ bị khai thác. Khi đó đừng đăng công khai — làm theo hướng dẫn trong <code>SECURITY.md</code> của dự án để báo riêng cho maintainer.</p>
 
-      <h3 id="courtesy">Lịch sự không thừa</h3>
-      <p>“Please”, “Thank you in advance”, “Cảm ơn dù bạn không trả lời” đều miễn phí và làm tăng đáng kể tỷ lệ được giúp. Nhưng nhớ: lịch sự là <em>cộng thêm</em>, không phải <em>thay thế</em> cho nội dung tốt.</p>
+      <h3 id="courtesy">Lịch sự vừa đủ</h3>
+      <p><em>“Please”</em>, <em>“Thanks in advance”</em>, <em>“Thanks for your time either way”</em> đều miễn phí và giúp câu hỏi dễ được đón nhận hơn. Một câu cảm ơn ngắn ở cuối là đủ.</p>
+      <p>Cái cần bỏ là chuỗi lời chào và kính ngữ kéo dài kiểu <em>“Please please help me, I really need this, thank you so much in advance, I will be very grateful!!!”</em> Nó không làm câu hỏi tốt hơn, chỉ bắt người đọc lướt qua thêm một đoạn. Nhớ: lịch sự là <em>cộng thêm</em>, không phải <em>thay thế</em> cho nội dung tốt.</p>
+
+      <span id="easy-reply" class="anchor"></span>
+      <h3 id="no-private">Hỏi công khai, đừng đòi trả lời riêng</h3>
+      <p>Đừng kết câu hỏi bằng <em>“Please email me directly, I don't check this forum.”</em> Câu đó ngầm nói: <em>tôi quan trọng hơn cộng đồng của bạn</em>. Người ta sẽ bỏ qua.</p>
+      <p>Hỏi công khai thì nhận trả lời công khai. Đó là cách kiến thức được lưu lại và giúp được người tiếp theo gặp vấn đề tương tự. Đòi trả lời riêng cũng giống như coi cộng đồng là tổng đài hỗ trợ của riêng mình.</p>
+
+      <h3 id="homework">Đừng post bài tập về nhà</h3>
+      <p>Người trả lời nhận ra <em>bài tập trên lớp</em> rất nhanh. Việc làm bài hộ không giúp bạn học. Nếu bạn thực sự kẹt, hãy nói rõ bạn đang học, đã thử cách nào, bí ở bước nào — chứ không phải đăng nguyên đề bài rồi chờ ai đó submit hộ.</p>
 
       <h3 id="followup">Báo lại lời giải</h3>
       <p>Khi bạn đã giải quyết được vấn đề, <strong>quay lại post một note ngắn</strong> mô tả lời giải. Việc này:</p>
@@ -574,11 +662,11 @@ on Safari iOS</pre>
         <li>Giúp người tiếp theo google ra câu trả lời.</li>
         <li>Tăng uy tín của bạn trong cộng đồng.</li>
       </ul>
-      <p>Một câu hỏi tốt + lời giải tốt là một <em>tài sản</em> của cộng đồng. Một câu hỏi bị bỏ rơi sau khi giải quyết là một viên gạch hỏng.</p>
+      <p>Một câu hỏi tốt kèm lời giải là <em>tài sản</em> của cộng đồng. Còn nếu bạn bỏ đi sau khi đã giải xong, người sau sẽ tìm thấy đúng câu hỏi của bạn nhưng không có lời giải.</p>
     </section>
 
     <section id="interpret">
-      <h2><span class="num">[05]</span> Cách đọc câu trả lời</h2>
+      <h2><span class="num">[08]</span> Cách đọc câu trả lời</h2>
 
       <h3 id="rtfm">RTFM và STFW — Khi bạn nhận được hai chữ này</h3>
       <p><strong>RTFM</strong> = “Read The F***ing Manual.” <strong>STFW</strong> = “Search The F***ing Web.” Nhận được hai cụm này nghĩa là người trả lời cho rằng:</p>
@@ -591,12 +679,12 @@ on Safari iOS</pre>
       <h3 id="not-understand">Nếu bạn không hiểu câu trả lời</h3>
       <p>Đừng vội đáp “Tôi không hiểu, giải thích lại được không?” Hãy <em>chứng tỏ bạn đã cố hiểu</em>:</p>
       <blockquote>
-        “Cảm ơn. Tôi đã thử X theo gợi ý, nhưng kết quả ra Y. Tôi đoán mình hiểu sai ở chỗ Z. Có phải ý của bạn là…?”
+        “Thanks. I tried X as you suggested, but got Y. I think I'm misunderstanding Z. Did you mean…?”
       </blockquote>
 
       <h3 id="rudeness">Đối phó với “thô lỗ”</h3>
-      <p>Phần lớn cái trông như thô lỗ trong cộng đồng hacker <em>không phải</em> là sự xúc phạm cá nhân. Đó là <strong>văn hóa truyền đạt thẳng, không vòng vo</strong>. Khi một hacker bảo bạn “điều bạn vừa nói là sai”, đó không phải tấn công — đó là dữ liệu.</p>
-      <p>Tách câu chữ ra khỏi giọng điệu. Lấy phần kỹ thuật, bỏ qua phần thô. Đáp trả thô lỗ chỉ chứng minh bạn không thuộc về văn hóa này.</p>
+      <p>Phần lớn cái trông như thô lỗ trong cộng đồng kỹ thuật <em>không phải</em> là sự xúc phạm cá nhân. Đó là <strong>văn hóa truyền đạt thẳng, không vòng vo</strong>. Khi một người có kinh nghiệm bảo bạn “điều bạn vừa nói là sai”, đó không phải tấn công — đó là dữ liệu.</p>
+      <p>Tách câu chữ ra khỏi giọng điệu. Lấy phần kỹ thuật, bỏ qua phần thô. Đáp trả gay gắt chỉ làm cuộc trao đổi tệ thêm, và người khác sẽ ngại giúp bạn.</p>
       <p>Tuy nhiên, có ranh giới: tấn công cá nhân, kỳ thị, hoặc chế giễu chủng tộc/giới tính KHÔNG phải “văn hóa hacker”. Đó là độc hại. Báo cáo cho moderator của diễn đàn đó.</p>
 
       <h3 id="loser">Đừng phản ứng như “kẻ thua cuộc”</h3>
@@ -611,111 +699,152 @@ on Safari iOS</pre>
     </section>
 
     <section id="dont-ask">
-      <h2><span class="num">[06]</span> Những câu hỏi không nên hỏi</h2>
-      <p>Dưới đây là một số dạng câu hỏi kinh điển khiến hacker quay lưng — kèm <em>cái họ đang nghĩ</em> nhưng có thể không nói ra:</p>
+      <h2><span class="num">[09]</span> Những câu hỏi không nên hỏi</h2>
+      <p>Dưới đây là một số dạng câu hỏi kinh điển khiến người trả lời quay lưng — kèm <em>cái họ đang nghĩ</em> nhưng có thể không nói ra, và cách hỏi lại cho tốt:</p>
 
       <div class="qa">
-        <div class="q">Em mới học lập trình, em nên học ngôn ngữ nào?</div>
-        <div class="a">Bạn chưa Google. Bạn cũng chưa nghĩ tới <em>bạn muốn làm gì với nó</em>. Câu này hỏi 1000 lần, có 1000 câu trả lời sẵn trên web.</div>
+        <div class="q">I'm new to programming. Which language should I learn?</div>
+        <div class="a">Bạn chưa Google. Bạn cũng chưa nghĩ tới <em>bạn muốn làm gì với nó</em>. Câu này đã được hỏi hàng nghìn lần, câu trả lời có sẵn trên web.</div>
+        <div class="better">“I want to build Android apps and I already know some Python. Is Kotlin a reasonable next step, or should I start with something else?”</div>
       </div>
 
       <div class="qa">
-        <div class="q">Code của em không chạy. Giúp em với!</div>
-        <div class="a">Code nào? Lỗi gì? Bạn mong nó làm gì? Bạn đã thử gì? Không có dữ liệu = không có câu trả lời.</div>
+        <div class="q">My code doesn't work. Help!</div>
+        <div class="a">Code nào? Lỗi gì? Bạn mong nó làm gì? Bạn đã thử gì? Không có dữ kiện thì không ai trả lời được.</div>
+        <div class="better">“Python 3.12: <code>json.loads</code> raises <code>JSONDecodeError: Expecting value</code> on a file that looks valid. Code and a sample file are below.” (Dùng <a href="#template">mẫu câu hỏi</a>.)</div>
       </div>
 
       <div class="qa">
-        <div class="q">Có ai trên Linux không?</div>
+        <div class="q">Anyone here use Linux?</div>
         <div class="a">Đừng <em>xin phép hỏi</em>. Hỏi luôn. Khi có ai biết, họ sẽ trả lời.</div>
+        <div class="better">“On Ubuntu 24.04, Wi-Fi disconnects every time my laptop wakes from sleep. Relevant <code>journalctl</code> output is below. Has anyone seen this?”</div>
       </div>
 
       <div class="qa">
-        <div class="q">Làm sao crack/hack/jailbreak X?</div>
-        <div class="a">Không.</div>
+        <div class="q">How do I crack/hack/jailbreak X?</div>
+        <div class="a">Không. Bẻ khóa bản quyền hay xâm nhập hệ thống của người khác là vi phạm pháp luật và vi phạm quy định của hầu hết cộng đồng. Hỏi câu này dễ bị ban, và không ai muốn dính vào.</div>
+        <div class="better">Nếu bạn đang học bảo mật, hỏi trong cộng đồng CTF / security và nói rõ môi trường lab: “I'm practicing on a HackTheBox lab machine and I'm stuck on privilege escalation. Here's what I've enumerated so far: …”</div>
       </div>
 
       <div class="qa">
-        <div class="q">Có thể làm hộ em bài tập này không, em deadline tối nay.</div>
+        <div class="q">Can someone do this assignment for me? It's due tonight.</div>
         <div class="a">Không. Và việc đó không giúp bạn học. Bạn đang xin một con cá, không phải xin học cách câu.</div>
+        <div class="better">“I'm learning recursion. My function returns the wrong result when n = 0. Here's my code and what I traced by hand — where is my reasoning wrong?”</div>
       </div>
 
       <div class="qa">
-        <div class="q">Vì sao X chậm/dở/tệ?</div>
+        <div class="q">Why is X so slow?</div>
         <div class="a">So sánh với cái gì? Bạn đã đo bằng cách nào? Bạn có benchmark không? “Cảm giác chậm” không phải dữ liệu.</div>
+        <div class="better">“X takes 4s to parse a 10MB JSON file, while Y takes 0.6s on the same machine (benchmark script below). Is that expected, or am I misusing X?”</div>
       </div>
     </section>
 
     <section id="good-bad">
-      <h2><span class="num">[07]</span> Câu hỏi hay vs câu hỏi dở — ví dụ thực tế</h2>
+      <h2><span class="num">[10]</span> Câu hỏi tốt và câu hỏi dở — ví dụ thực tế</h2>
 
       <div class="compare">
         <div class="bad">
           <span class="label">Câu hỏi dở</span>
-<pre>Tiêu đề: HELP!!!
+<pre>Title: HELP!!!
 
-Code em không chạy, ai giúp với ạ.
-Em đang làm app React, click vào button
-nó không hiện gì hết. Em xin cảm ơn các
-anh chị tiền bối nhiều ạ!!!</pre>
+my react app not working. when i click the button nothing happen and everything disappear. pls help, thank you so much in advance!!!</pre>
         </div>
         <div class="good">
           <span class="label">Câu hỏi tốt</span>
-<pre>Tiêu đề: React 18 + Vite: onClick không
-fire trên &lt;button&gt; bên trong &lt;form&gt;
-sau khi thêm preventDefault
+<pre>Title: React 18 + Vite: clicking a &lt;button&gt; inside a &lt;form&gt; reloads the page and resets state
 
-Mô tả:
-- React 18.2, Vite 5, Chrome 121, macOS 14
-- Khi click button, kỳ vọng handler chạy
-  → console.log ra. Thực tế: không log gì.
-- Đã thử: kiểm tra event listener trong
-  DevTools (có gắn), thử thay onClick bằng
-  onPointerDown (vẫn không fire).
-- MRE: https://stackblitz.com/edit/xxx
-- Đoán: có thể form đang trigger submit
-  trước? Nhưng e.preventDefault() đã được
-  gọi trong onClick.
+Environment: React 18.2, Vite 5.1, Chrome 121, macOS 14
 
-Câu hỏi: Tại sao handler không chạy,
-và cách fix đúng là gì?</pre>
+Goal: an "Add item" button that appends a row to a list kept in useState.
+
+Expected: clicking the button adds one row.
+Actual: the page reloads and the list goes back to empty. No error in the console.
+
+What I've tried:
+- console.log inside onClick: the log shows up, then the page reloads (seen with "Preserve log" enabled in DevTools).
+- Moving the button outside the &lt;form&gt;: works as expected.
+
+MRE (15 lines): https://stackblitz.com/edit/xxx
+
+Question: why does a button inside a form reload the page, and what's the right way to keep it inside the form?</pre>
         </div>
       </div>
+      <p>Người trả lời đọc xong là thấy ngay nguyên nhân: <code>&lt;button&gt;</code> nằm trong <code>&lt;form&gt;</code> mặc định là <code>type="submit"</code>, nên bấm vào sẽ submit form và reload trang. Sửa bằng <code>type="button"</code>. Câu hỏi đủ dữ kiện thì câu trả lời đến rất nhanh.</p>
 
       <hr>
 
       <div class="compare">
         <div class="bad">
           <span class="label">Câu hỏi dở</span>
-<pre>Database em bị chậm. Có ai biết tại sao
-không ạ?</pre>
+<pre>Title: Database very slow
+
+my database is very slow, anyone know why?</pre>
         </div>
         <div class="good">
           <span class="label">Câu hỏi tốt</span>
-<pre>Postgres 16: query JOIN 3 bảng chậm
-2.5s → 18s sau khi data tăng gấp đôi
-(~50M rows)
+<pre>Title: Postgres 16: 3-table JOIN went from 2.5s to 18s after data doubled (~50M rows)
 
-- EXPLAIN ANALYZE:
-  https://explain.dalibo.com/plan/xyz
-- Index hiện có: idx_users_email,
-  idx_orders_user_id, idx_items_order_id
-- pg_stat_statements: top 3 query đính kèm
-- shared_buffers=4GB, work_mem=64MB,
-  effective_cache_size=12GB (RAM 16GB)
-- Bảng đã ANALYZE gần nhất 2h trước
+Query:
+  SELECT o.id, o.created_at, u.email, SUM(i.price * i.qty) AS total
+  FROM orders o
+  JOIN users u ON u.id = o.user_id
+  JOIN items i ON i.order_id = o.id
+  WHERE o.status = 'paid'
+    AND o.created_at &gt;= now() - interval '30 days'
+  GROUP BY o.id, u.email;
 
-Câu hỏi: Plan đang seq scan trên orders
-dù có index. Có cách nào ép planner dùng
-index, hoặc có index composite nào tốt
-hơn cho query này không?</pre>
+- EXPLAIN (ANALYZE, BUFFERS): https://explain.dalibo.com/plan/xyz
+- Existing indexes: idx_users_email, idx_orders_user_id, idx_items_order_id
+- shared_buffers=4GB, work_mem=64MB, effective_cache_size=12GB (16GB RAM)
+- All three tables were ANALYZEd 2 hours ago
+
+Question: the plan does a seq scan on orders, although the WHERE clause matches only ~2% of rows. Is a composite index on orders(status, created_at) the right fix, or am I missing something?</pre>
         </div>
       </div>
 
-      <p style="margin-top:18px;">Sự khác biệt không nằm ở số lượng chữ. Nó nằm ở <strong>chất lượng dữ kiện</strong> bạn cung cấp. Câu hỏi tốt làm việc giùm người trả lời 80% — họ chỉ cần đưa ra mảnh ghép cuối.</p>
+      <p style="margin-top:18px;">Sự khác biệt không nằm ở số lượng chữ. Nó nằm ở <strong>chất lượng dữ kiện</strong> bạn cung cấp. Câu hỏi tốt đã làm sẵn phần lớn việc cho người trả lời — họ chỉ cần đưa ra mảnh ghép cuối.</p>
+    </section>
+
+    <section id="template">
+      <h2><span class="num">[11]</span> Mẫu câu hỏi</h2>
+      <p>Copy mẫu dưới đây, điền vào, xóa mục nào không liên quan. Không cần đủ hết, nhưng <strong>Goal</strong>, <strong>Expected</strong>, <strong>Actual</strong> và <strong>What I've tried</strong> gần như lúc nào cũng cần.</p>
+      <div class="template">
+        <button type="button" class="copy-btn">copy</button>
+<pre id="template-text">Title: &lt;Tool + version&gt;: &lt;specific symptom&gt; &lt;when / under what condition&gt;
+
+Goal
+&lt;What you are ultimately trying to do, in one or two sentences.&gt;
+
+Environment
+- OS:
+- Language / runtime + version:
+- Library / framework + version:
+
+Steps to reproduce
+1.
+2.
+3.
+
+Expected
+&lt;What you expected to happen.&gt;
+
+Actual
+&lt;What actually happened. Paste the full error message in a code block.&gt;
+
+What I've tried
+- &lt;Attempt 1&gt; → &lt;result&gt;
+- &lt;Attempt 2&gt; → &lt;result&gt;
+
+Minimal reproducible example
+&lt;Link to a repo / StackBlitz / gist, or ~20 lines of code in a code block.&gt;
+
+Question
+&lt;The one specific question you want answered.&gt;</pre>
+      </div>
     </section>
 
     <section id="no-answer">
-      <h2><span class="num">[08]</span> Nếu không có ai trả lời</h2>
+      <h2><span class="num">[12]</span> Nếu không có ai trả lời</h2>
       <p>Đừng coi đó là chuyện cá nhân. Có nhiều lý do hợp lý:</p>
       <ul>
         <li>Câu hỏi của bạn quá đặc thù, không ai từng gặp.</li>
@@ -725,25 +854,25 @@ hơn cho query này không?</pre>
       </ul>
       <p>Hành động tiếp:</p>
       <ol>
-        <li>Đợi đủ thời gian (24-72h tùy kênh). Đừng <em>bump</em> sau 10 phút.</li>
+        <li>Đợi đủ thời gian (24-72h tùy kênh). Đừng <em>bump</em> (đẩy bài lên lại) sau 10 phút.</li>
         <li>Xem lại câu hỏi. Có thể viết lại cô đọng &amp; rõ hơn?</li>
         <li>Thử kênh khác phù hợp hơn (đề cập chéo nhưng đừng spam).</li>
-        <li>Nếu là dự án thương mại: có thể bạn cần <strong>support trả phí</strong>. Cộng đồng OSS không phải hỗ trợ kỹ thuật 24/7.</li>
+        <li>Nếu là dự án thương mại: có thể bạn cần <strong>support trả phí</strong>. Cộng đồng mã nguồn mở không phải hỗ trợ kỹ thuật 24/7.</li>
         <li>Tiếp tục tự debug. Đôi khi quá trình viết câu hỏi đã giúp bạn nhận ra lời giải (rubber duck debugging).</li>
       </ol>
     </section>
 
     <section id="how-answer">
-      <h2><span class="num">[09]</span> Mặt còn lại: cách trả lời câu hỏi cho tử tế</h2>
+      <h2><span class="num">[13]</span> Mặt còn lại: cách trả lời câu hỏi cho tử tế</h2>
       <p>Nếu bạn là người trả lời, cộng đồng cũng cần bạn theo những nguyên tắc này:</p>
       <ul>
-        <li><strong>Dịu dàng.</strong> Người hỏi đang căng thẳng. Khắc nghiệt với người mới = hỏng cả cộng đồng dài hạn.</li>
+        <li><strong>Nhẹ nhàng.</strong> Người hỏi đang căng thẳng. Khắt khe với người mới thì lâu dần cộng đồng sẽ không còn người mới.</li>
         <li><strong>Nếu trả lời, trả lời cho ra hồn.</strong> Đừng đáp nửa vời, để người hỏi đoán phần còn lại.</li>
         <li><strong>Hỏi lại để làm rõ trước khi mắng.</strong> Đôi khi câu hỏi dở chỉ vì người hỏi chưa biết phải cung cấp gì.</li>
-        <li><strong>Chỉ chỗ tìm, đừng chỉ cho cá.</strong> Link tới doc, tới tag SO, tới tool. Dạy cách câu cá quan trọng hơn việc cho cá.</li>
+        <li><strong>Chỉ cách tìm, đừng chỉ đưa đáp án.</strong> Link tới doc, tới tag Stack Overflow, tới tool. Dạy cách câu cá quan trọng hơn việc cho cá.</li>
         <li><strong>Đừng chế nhạo người mới.</strong> Bạn cũng từng là người mới. Câu trả lời của bạn sẽ được người khác đọc trong nhiều năm.</li>
         <li><strong>Nếu không trả lời, đừng phá thread.</strong> Im lặng tốt hơn nhiều so với một câu “lol” hoặc “noob”.</li>
-        <li><strong>Đáp công khai khi có thể.</strong> Một câu trả lời tốt = tài liệu cho cả ngàn người tiếp theo.</li>
+        <li><strong>Đáp công khai khi có thể.</strong> Một câu trả lời tốt sẽ thành tài liệu cho rất nhiều người đến sau.</li>
       </ul>
       <div class="callout tip">
         <span class="label">// tip</span>
@@ -752,7 +881,7 @@ hơn cho query này không?</pre>
     </section>
 
     <section id="resources">
-      <h2><span class="num">[10]</span> Tài nguyên liên quan</h2>
+      <h2><span class="num">[14]</span> Tài nguyên liên quan</h2>
       <ul>
         <li><a href="http://www.catb.org/~esr/faqs/smart-questions.html" target="_blank" rel="noopener">Bài gốc — How To Ask Questions The Smart Way</a></li>
         <li><a href="http://www.catb.org/~esr/faqs/hacker-howto.html" target="_blank" rel="noopener">How To Become A Hacker — ESR</a></li>
@@ -765,14 +894,14 @@ hơn cho query này không?</pre>
     </section>
 
     <section id="thanks">
-      <h2><span class="num">[11]</span> Lời cảm ơn</h2>
-      <p>Bản gốc của Eric S. Raymond và Rick Moen đã định hình văn hóa hỏi-đáp kỹ thuật trong suốt 20+ năm. Bản tiếng Việt này được viết lại với mong muốn giúp lập trình viên nói tiếng Việt tham gia cộng đồng quốc tế một cách tự tin và được giúp đỡ.</p>
+      <h2><span class="num">[15]</span> Lời cảm ơn</h2>
+      <p>Bản gốc của Eric S. Raymond và Rick Moen đã định hình văn hóa hỏi-đáp kỹ thuật trong suốt 20+ năm. Hướng dẫn tiếng Việt này được viết với mong muốn giúp lập trình viên nói tiếng Việt tham gia cộng đồng quốc tế một cách tự tin và được giúp đỡ.</p>
       <p>Nếu bài viết hữu ích, hãy chuyển nó cho người tiếp theo bạn thấy đang chuẩn bị đăng một câu hỏi mơ hồ trong một group lập trình.</p>
 
       <div class="callout note">
         <span class="label">// copyright</span>
-        Bài gốc © Eric S. Raymond &amp; Rick Moen, theo chính sách copying tại <a href="http://www.catb.org/~esr/" target="_blank" rel="noopener">catb.org</a>.
-        Bản viết lại này tôn trọng nguyên tác, không thay thế bản chính thức.
+        Bài gốc © Eric S. Raymond &amp; Rick Moen, theo <a href="http://www.catb.org/~esr/copying.html" target="_blank" rel="noopener">chính sách copying tại catb.org</a>.
+        Trang này là hướng dẫn dựa trên và bình luận về bài gốc, không phải bản dịch và không thay thế bản chính thức.
       </div>
     </section>
 
@@ -782,7 +911,7 @@ hơn cho query này không?</pre>
 └─────────────────────────────────────────────┘</pre>
       <div>
         $ echo "EOF · made for vietnamese devs · 2026"<br>
-        Bản viết lại: phi lợi nhuận, không thay thế bản gốc. Phản hồi luôn được hoan nghênh.
+        Hướng dẫn phi lợi nhuận, dựa trên bài gốc của ESR &amp; Rick Moen, không thay thế bản gốc. Phản hồi luôn được hoan nghênh.
       </div>
     </footer>
 
@@ -808,6 +937,36 @@ hơn cho query này không?</pre>
   }, { rootMargin: '-40% 0px -55% 0px' });
 
   targets.forEach(t => obs.observe(t.el));
+
+  // Mục lục: luôn mở trên desktop, thu gọn trên mobile để nội dung hiện ngay
+  const toc = document.querySelector('.toc');
+  const mobile = window.matchMedia('(max-width: 980px)');
+  const syncToc = () => { toc.open = !mobile.matches; };
+  syncToc();
+  mobile.addEventListener('change', syncToc);
+  toc.querySelector('summary').addEventListener('click', (e) => {
+    if (!mobile.matches) e.preventDefault();
+  });
+  toc.addEventListener('click', (e) => {
+    if (mobile.matches && e.target.closest('a')) toc.open = false;
+  });
+
+  const copyBtn = document.querySelector('.copy-btn');
+  const templateText = document.getElementById('template-text');
+  copyBtn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(templateText.innerText);
+      copyBtn.textContent = 'đã copy';
+    } catch {
+      const range = document.createRange();
+      range.selectNodeContents(templateText);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      copyBtn.textContent = 'đã chọn, nhấn Ctrl/Cmd+C';
+    }
+    setTimeout(() => { copyBtn.textContent = 'copy'; }, 2000);
+  });
 </script>
 
 </body>
